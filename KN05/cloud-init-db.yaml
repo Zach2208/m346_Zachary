@@ -1,0 +1,10 @@
+#cloud-config
+package_update: true
+packages:
+  - mariadb-server
+
+runcmd:
+  - sudo mysql -e "CREATE DATABASE db_name;"
+  - sudo mysql -e "CREATE USER 'user'@'%' IDENTIFIED BY 'password';"
+  - sudo mysql -e "GRANT ALL ON db_name.* TO 'user'@'%';"
+  - sudo mysql -e "FLUSH PRIVILEGES;"
