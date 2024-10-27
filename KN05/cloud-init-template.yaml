@@ -1,0 +1,17 @@
+#cloud-config # Beginn der cloud-config Datei
+users: # Liste der Benutzer, die konfiguriert werden sollen
+  - name: ubuntu # Name des Benutzers
+    sudo: ALL=(ALL) NOPASSWD:ALL # Gewährt dem Benutzer sudo-Rechte ohne Passwortanforderung
+    groups: users, admin # Der Benutzer wird den Gruppen "users" und "admin" hinzugefügt
+    home: /home/ubuntu # Das Home-Verzeichnis des Benutzers
+    shell: /bin/bash # Standard-Shell des Benutzers
+    ssh_authorized_keys: # Liste der autorisierten SSH-Schlüssel für den Benutzer
+      - ssh-rsa MIIEogIBAAKCAQEAh/kP1lScEyI4ANjn7TpedAiYJaf1G52PqDJERx0sRCvSFvmigpeb1PUEIQFTsNoZ1DvNxRPIyJPbQe6twVFOpqiOo62sLMuoSKgNU4bKSvqUjWUtEtERfFvDEmugdNj4N+N0Rcco87aN4Ne1BQCdQAHOhoTE+6xu8YeLbtvVIdw7+Foi6JRrFOOYKtZnYkgAQxUJ910wOUQvYzftvGq6pVl+0DMqQQRpvBdL74vN8VUJunTb2h0T9hswyJb2xSIcVtew44mw7D16X3A6sgAKFpagOr33N8Vh5RSH8ZaClwekwQgNbAWAcAemPxZb//KV4pK1aVDnMWXwuC+cpnucawIDAQABAoIBAAU6/nH3NT3DLjZSIbHNcf6yqe+g41vZlsIYlOnLZH2G1gEOP0MYw+TQPAVtAKQn76BrYIH5PdsBXQjPPp3WG9lrWHlRX/MlLmcFF+YjpDp4IyjBQJedtTd8bCeUPkrgYcP8mudoPtoJJrIEejEkEeh5aVFhYBZyTp454ZI1IKC5wpIxFeSD68CxEOfA6ApAQmZkCtI30LgT4PyxFSrLguDHYqLBetnZKJrvRKP7lYEFVASEqcS5jRKy9G0B9tc8cOzoU3oXHtWnRHT1NjXsWn44OkXA+ObvouZRLMxrZrt/eG0IYaqeTu0hM/UybuOqDo+YdvFsfxCObFH0P4BbaUkCgYEA1pbBvE9t9tkj33QR13ltyhw4OHEXNj2OAuA/q9eGwJGpixSqH8VjKLNPz+Z2s6Dt++wVC0zCJuANGUeLUZXd6HASP68PiObj8zUNrJsB2Ohmn/tWA0rik9kd8Ui2on1fYdGehDQIaIivf/eHDClguJapnKfR4JBhAawN0JrxL00CgYEAojZ5A6Fk+tKQiwk+PIYESZUzAqWWNHw1m9nJDWgfNkPLOeMgfMqh6ze08c31kuP3pyhgmRFvdYo41JaiqTnmdV0mR21IZ+q76nSmRRBVyO9bt764nbii2NDA9b+zyd8lRgg1kxGbP5BoL2DOKSOMQakGy5dpPsd0v+QqldvsjpcCgYB4xsUnzbTgmHo+TD+2fRu0A4oJCm28E40YRUrQ1y96twErzGesFhanU7T6GIZ6t3r6rXdysrMb2kLFFaVuN+F774f12/vsW7e0rQmTOnMhuDv6kyVoGP/JowvdP8W7UsEadza2xeptm3Dbn1+dErTjb7jq+PGBaQGQRVxJKsvQiQKBgCWK9fchI33pvgpv2TeozNU68tNp/5mmJcIsZZv0vUSR7Dc5mgtH2rHV8ssEIBIfMPI/JhxHLMTHeN+6/WqtO+lt5a4iXN+wNE3PMaxKW5Bl1ZRxT8kxMn970S0PcU0HmFjdDYk8SfIsOfC9NvnOgGex9yCnqnQdNagz5qdIfzeBAoGAQO9+KmdW4Cgw+i+zNTtH6+SbhwkltCACtAwuUMjoRBBgvF+N8VFHNgXnl8ddtQbZrDB1NzdFYUpwgMiTapp+k48icx8WjEPRGdZXbHMLS+HHUZvSlpcfDybEg4mrMwk3Qk9NAcafa6rvqrJUZ0pxuVU8pRnzx3v759R+vKgLx3Q= aws-key # SSH-Schlüssel zur Authentifizierung
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0WGP1EZykEtv5YGC9nMiPFW3U3DmZNzKFO5nEu6uozEHh4jLZzPNHSrfFTuQ2GnRDSt+XbOtTLdcj26+iPNiFoFha42aCIzYjt6V8Z+SQ9pzF4jPPzxwXfDdkEWylgoNnZ+4MG1lNFqa8aO7F62tX0Yj5khjC0Bs7Mb2cHLx1XZaxJV6qSaulDuBbLYe8QUZXkMc7wmob3PM0kflfolR3LE7LResIHWa4j4FL6r5cQmFlDU2BDPpKMFMGUfRSFiUtaWBNXFOWHQBC2+uKmuMPYP4vJC9sBgqMvPN/X2KyemqdMvdKXnCfrzadHuSSJYEzD64Cve5Zl9yVvY4AqyBD aws-key       
+
+ssh_pwauth: false # Deaktiviert die Passwort-Authentifizierung per SSH
+disable_root: false # Der Root-Benutzer bleibt aktiviert
+package_update: true # Überprüft auf Paket-Updates beim Start
+packages: # Liste der zu installierenden Pakete
+  - curl # Installiert das Paket "curl"
+  - wget # Installiert das Paket "wget"
