@@ -1,31 +1,55 @@
 #cloud-config
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    home: /home/ubuntu
+    shell: /bin/bash
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCH+Q/WVJwTIjgA2OftOl50CJglp/UbnY+oMkRHHSxEK9IW+aKCl5vU9QQhAVOw2hnUO83FE8jIk9tB7q3BUU6mqI6jrawsy6hIqA1ThspK+pSNZS0S0RF8W8MSa6B02Pg343RFxyjzto3g17UFAJ1AAc6GhMT7rG7xh4tu29Uh3Dv4WiLolGsU45gq1mdiSABDFQn3XTA5RC9jN+28arqlWX7QMypBBGm8F0vvi83xVQm6dNvaHRP2GzDIlvbFIhxW17DjibDsPXpfcDqyAAoWlqA6vfc3xWHlFIfxloKXB6TBCA1sBYBwB6Y/Flv/8pXikrVpUOcxZfC4L5yme5xr
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0WGP1EZykEtv5YGC9nMiPFW3U3DmZNzKFO5nEu6uozEHh4jLZzPNHSrfFTuQ2GnRDSt+XbOtTLdcj26+iPNiFoFha42aCIzYjt6V8Z+SQ9pzF4jPPzxwXfDdkEWylgoNnZ+4MG1lNFqa8aO7F62tX0Yj5khjC0Bs7Mb2cHLx1XZaxJV6qSaulDuBbLYe8QUZXkMc7wmob3PM0kflfolR3LE7LResIHWa4j4FL6r5cQmFlDU2BDPpKMFMGUfRSFiUtaWBNXFOWHQBC2+uKmuMPYP4vJC9sBgqMvPN/X2KyemqdMvdKXnCfrzadHuSSJYEzD64Cve5Zl9yVvY4AqyBD aws-key 
+ssh_pwauth: false
+disable_root: false
 package_update: true
+package_upgrade: true
 packages:
   - apache2
   - php
+  - libapache2-mod-php
+  - php-mysqli
+  - git
   - adminer
-
-runcmd:
-  - sudo a2enconf adminer
-  - sudo systemctl restart apache2
-
 write_files:
-  - path: /var/www/html/index.html
-    content: |
-      <html>
-        <body>
-          <h1>Willkommen auf der Startseite</h1>
-        </body>
-      </html>
-  - path: /var/www/html/info.php
-    content: |
-      <?php phpinfo(); ?>
   - path: /var/www/html/db.php
+    permissions: "0644"
     content: |
       <?php
-        $conn = new mysqli('3.90.99.233', 'admin', 'admin', 'KN05');
-        if ($conn->connect_error) {
+      //database
+      $servername = "172.31.16.22";
+      $username = "admin";
+      $password = "password";
+      $dbname = "mysql";
+      // Create connection
+      $conn = new mysqli($servername, $username, $password, $dbname);
+      // Check connection
+      if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
-        }
-        echo "Connected successfully to the database.";
+      }
+      $sql = "select Host, User from mysql.user;";
+      $result = $conn->query($sql);
+      while($row = $result->fetch_assoc()){
+          echo($row["Host"] . " / " . $row["User"] . "<br />");
+      }
       ?>
+ 
+  - path: /var/www/html/info.php
+    permissions: "0644"
+    content: |
+      <?php
+      // Show all information, defaults to INFO_ALL
+      phpinfo();
+      ?>
+ 
+runcmd:
+  - sudo a2enmod rewrite
+  - sudo a2enconf adminer
+  - sudo systemctl restart apache2
